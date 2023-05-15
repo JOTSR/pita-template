@@ -4,7 +4,6 @@
     <p>Simpliest way to develop secure and powerful webapps for redpitaya.</p>
 </div>
 
-![GitHub all releases](https://img.shields.io/github/downloads/JOTSR/pita-template/total?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/JOTSR/pita-template?style=flat-square)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/JOTSR/pita-template?style=flat-square)
 
