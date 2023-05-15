@@ -1,0 +1,14 @@
+{
+	"recommendations": [
+		"denoland.vscode-deno",
+		"rust-lang.rust-analyzer",
+		"yzhang.markdown-all-in-one",
+		"bierner.markdown-checkbox",
+		"bierner.markdown-emoji",
+		"bierner.markdown-footnotes",
+		"bierner.markdown-preview-github-styles",
+		"fisheva.eva-theme",
+		"ms-ceintl.vscode-language-pack-fr",
+		"yoavbls.pretty-ts-errors"
+	]
+}

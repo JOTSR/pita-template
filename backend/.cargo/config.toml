@@ -1,0 +1,7 @@
+[alias]
+b = "build --release --target armv7-unknown-linux-gnueabihf"
+
+[target.armv7-unknown-linux-gnueabihf.rp_sdk]
+rustc-link-lib = ["rp_sdk"]
+rustc-link-search = ["./lib"]
+rustc-flags = "-L ./lib/librp_sdk.a"

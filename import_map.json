@@ -1,0 +1,14 @@
+{
+	"imports": {
+		"preact": "https://esm.sh/preact@10.13.2",
+		"preact/": "https://esm.sh/preact@10.13.2/",
+		"esbuild": "https://deno.land/x/esbuild@v0.17.18/mod.js",
+		"@std/": "https://deno.land/std@0.185.0/",
+		"@/": "./",
+		"@pita/": "./.pita/",
+		"@types": "./frontend/types.ts",
+		"@components/": "./frontend/components/",
+		"@panels/": "./frontend/panels/",
+		"core-js/": "https://esm.sh/core-js@3.30.2/"
+	}
+}

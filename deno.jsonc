@@ -1,0 +1,45 @@
+{
+	"tasks": {
+		"watch:front": "deno task build:front --watch",
+		/********************
+		* pita cli endpoint *
+		********************/
+		"implement": "deno run --allow-read=. --allow-write=. --allow-run .pita/tasks/implement.ts",
+		//test
+		"test:front": "deno test -A",
+		"test:back": "echo 'not implemented'",
+		"test:fpga": "echo 'not implemented'",
+		//build
+		"build:front": "deno bundle ./frontend/app.tsx ./www/assets/app.js",
+		"build:back": "echo 'not implemented'",
+		"build:fpga": "echo 'not implemented'",
+		//bench
+		"bench:front": "deno bench -A",
+		"bench:back": "echo 'not implemented'",
+		"bench:fpga": "echo 'not implemented'",
+		//mock
+		"mock:front": "deno run -A .pita/tasks/mock_front/serve.ts & deno run -A .pita/tasks/mock_front/ws.ts",
+		"mock:back": "echo 'not implemented'",
+		"mock:fpga": "echo 'not implemented'"
+	},
+	"fmt": {
+		"useTabs": true,
+		"singleQuote": true,
+		"semiColons": false,
+		"indentWidth": 4,
+		"exclude": ["./backend"]
+	},
+	"importMap": "./import_map.json",
+	"compilerOptions": {
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"dom.asynciterable",
+			"deno.ns",
+			"deno.unstable",
+			"esnext"
+		],
+		"jsx": "react-jsx",
+		"jsxImportSource": "preact"
+	}
+}
