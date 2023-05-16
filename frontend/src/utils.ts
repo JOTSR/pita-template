@@ -1,6 +1,3 @@
-import { JsonValue } from '../types.ts'
-import { App } from './project.ts'
-
 /**
  * Returns the first element that is a descendant of node that matches selectors.
  * @param {T} selectors - List of html selectors.
@@ -94,33 +91,3 @@ export function upwardSelector<T extends HTMLElement = HTMLElement>(
 
 export const globalState = new Map<string, unknown>()
 
-export type StateOf<
-	T extends JsonValue,
-	K extends keyof App<T, undefined>['state'],
-	P,
-> = App<T, undefined>['state'][K] extends P ? K : never
-
-export const jsonStream = {
-	parse<T extends Record<string, unknown>>() {
-		return new TransformStream<string, T>({
-			transform(chunk, controler) {
-				try {
-					controler.enqueue(JSON.parse(chunk))
-				} catch (error) {
-					controler.error(error)
-				}
-			},
-		})
-	},
-	stringify<T extends Record<string, unknown>>() {
-		return new TransformStream<T, string>({
-			transform(chunk, controler) {
-				try {
-					controler.enqueue(JSON.stringify(chunk))
-				} catch (error) {
-					controler.error(error)
-				}
-			},
-		})
-	},
-}

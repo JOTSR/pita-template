@@ -1,36 +1,29 @@
+import { IOMode, IOType, IO } from 'pita_api'
 import { useEffect, useState } from 'preact/hooks'
-import { Button } from '../components/Button.tsx'
-import { Panel } from '../components/Panel.tsx'
-import { App } from '../src/project.ts'
-import { JsonValue } from '../types.ts'
-import { StateOf } from '../src/utils.ts'
+import { Button } from '@components/Button.tsx'
+import { Panel } from "@components/Panel.tsx"
 
-export function ToggleSwitch<
-	State extends JsonValue,
-	Key extends keyof App<State, undefined>['state'],
->(
-	{ title, app, state, messageOn, messageOff }: {
+export function ToggleSwitch(
+	{ title, pin, messageOn, messageOff }: {
 		title: string
-		app: App<State, undefined>
-		state: StateOf<State, Key, boolean>
+		pin: IO<IOMode.RW | IOMode.WO, IOType.Digital>
 		messageOn: string
 		messageOff: string
 	},
 ) {
-	const [toggleState, setToggleState] = useState(app.state[state])
+	const [state, setState] = useState(false)
 	useEffect(() => {
-		if (app.isReady) app.state[state] = toggleState
-	}, [toggleState])
+		pin.write(state)
+	}, [state])
 
 	return (
 		<Panel title={title} size={[1, 1]}>
 			<p>
-				{toggleState ? messageOn : messageOff}
+				{state ? messageOn : messageOff}
 			</p>
 			<Button
 				variant='primary'
-				//@ts-ignore fix type assertion
-				onClick={() => setToggleState(!toggleState)}
+				onClick={() => setState(!state)}
 			>
 				Switch
 			</Button>
