@@ -68,28 +68,28 @@ Use pita cli or tasks described in [deno.jsonc](./deno.jsonc)
 
 <pre>
 .
-├── <span style="color: royalblue">backend</span> <span style="color: grey">(interface between client and redpitaya fpga/cpu)</span>
-├── <span style="color: goldenrod">deno.jsonc</span> <span style="color: grey">(tasks)</span>
-├── <span style="color: royalblue">fpga</span> <span style="color: grey">(???? bitstream - fpga project structure)</span>
-├── <span style="color: royalblue">frontend</span> <span style="color: grey">(client-size application)</span>
-│   ├── <span style="color: tomato">app.tsx</span> <span style="color: grey">(app entry-point)</span>
-│   ├── <span style="color: royalblue">components</span> <span style="color: grey">(component lib for building your own panels)</span>
-│   └── <span style="color: royalblue">panels</span> <span style="color: grey">(control panels to monitor and pilot board IOs and state)</span>
-├── <span style="color: goldenrod">import_map.json</span> <span style="color: grey">(js path resolution)</span>
-└── <span style="color: royalblue">www</span> <span style="color: grey">(dist app folder)</span>
-    ├── <span style="color: royalblue">bin</span> <span style="color: grey">(temp c++ backend interface)</span>
-    ├── <span style="color: goldenrod">fpga.*</span> <span style="color: grey">(fpga bitstream loading)</span>
-    ├── <span style="color: tomato">index.html</span> <span style="color: grey">(server-side app entry point)</span>
-    ├── <span style="color: royalblue">info</span>
-    │   ├── <span style="color: forestgreen">favicon.png</span> <span style="color: grey">(browser icon)</span>
-    │   ├── <span style="color: forestgreen">icon.png</span> <span style="color: grey">(redpitaya menu icon)</span>
-    │   └── <span style="color: goldenrod">info.json</span> <span style="color: grey">(app info, do not manually edit version and revision)</span>
-    └── <span style="color: royalblue">src</span> <span style="color: grey">(build assets, do not edit)</span>
+├── <span style="color: royalblue">🔵 backend</span> <span style="color: grey">(interface between client and redpitaya fpga/cpu)</span>
+├── <span style="color: goldenrod">🟡 deno.jsonc</span> <span style="color: grey">(tasks)</span>
+├── <span style="color: royalblue">🔵 fpga</span> <span style="color: grey">(???? bitstream - fpga project structure)</span>
+├── <span style="color: royalblue">🔵 frontend</span> <span style="color: grey">(client-size application)</span>
+│   ├── <span style="color: tomato">🔴 app.tsx</span> <span style="color: grey">(app entry-point)</span>
+│   ├── <span style="color: royalblue">🔵 components</span> <span style="color: grey">(component lib for building your own panels)</span>
+│   └── <span style="color: royalblue">🔵 panels</span> <span style="color: grey">(control panels to monitor and pilot board IOs and state)</span>
+├── <span style="color: goldenrod">🟡 import_map.json</span> <span style="color: grey">(js path resolution)</span>
+└── <span style="color: royalblue">🔵 www</span> <span style="color: grey">(dist app folder)</span>
+    ├── <span style="color: royalblue">🔵 bin</span> <span style="color: grey">(temp c++ backend interface)</span>
+    ├── <span style="color: goldenrod">🟡 fpga.*</span> <span style="color: grey">(fpga bitstream loading)</span>
+    ├── <span style="color: tomato">🔴 index.html</span> <span style="color: grey">(server-side app entry point)</span>
+    ├── <span style="color: royalblue">🔵 info</span>
+    │   ├── <span style="color: forestgreen">🟢 favicon.png</span> <span style="color: grey">(browser icon)</span>
+    │   ├── <span style="color: forestgreen">🟢 icon.png</span> <span style="color: grey">(redpitaya menu icon)</span>
+    │   └── <span style="color: goldenrod">🟡 info.json</span> <span style="color: grey">(app info, do not manually edit version and revision)</span>
+    └── <span style="color: royalblue">🔵 src</span> <span style="color: grey">(build assets, do not edit)</span>
 
-<span style="color: royalblue">--- directory</span>
-<span style="color: tomato">--- entrypoint</span>
-<span style="color: forestgreen">--- assets</span>
-<span style="color: goldenrod">--- config</span>
+<span style="color: royalblue">🔵 directory</span>
+<span style="color: tomato">🔴 entrypoint</span>
+<span style="color: forestgreen">🟢 assets</span>
+<span style="color: goldenrod">🟡 config</span>
 </pre>
 
 ## Contributing
