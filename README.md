@@ -36,7 +36,7 @@ Use pita cli or tasks described in [deno.jsonc](./deno.jsonc)
    ```sh
    pita init
    ```
-3. Build sources and implement it on board.
+3. Build sources and implement it on the board.
    ```sh
    pita run
    ```
@@ -91,6 +91,106 @@ Use pita cli or tasks described in [deno.jsonc](./deno.jsonc)
 <span style="color: forestgreen">🟢 assets</span>
 <span style="color: goldenrod">🟡 config</span>
 </pre>
+
+## Operating diagrams
+
+```mermaid
+---
+title: Client side web app structure links
+---
+flowchart TB
+    subgraph client [Client browser]
+        direction TB
+        api[Pita API]
+        subgraph panels [Panels/Workers]
+            direction LR
+            panel1[Panel example 1]
+            panel2[Panel example 2]
+            webwk1[Worker example - specific code]
+        end
+
+        api -- Readable stream --> panels
+        panels -- Writable stream --> api
+    end
+    subgraph rp [Redpitaya board]
+        direction TB
+        server[NGNIX Server]
+    end
+
+    api -- HTTP controller init request --> server
+    api <-- Websocket --> server
+```
+
+```mermaid
+---
+title: Server side web app structure links
+---
+flowchart TB
+    subgraph client [Client browser]
+        direction TB
+        api[Pita API]
+    end
+    subgraph rp [Redpitaya board]
+        direction TB
+        subgraph cpu [CPU]
+            server[NGNIX Server]
+            controller[Controller]
+            sdk[Redpitaya SDK]
+            subgraph workers [Workers]
+                wk1[Specific code - ex. Kalman]
+                wk2[Specific code - ex. langevin]
+            end
+
+            server -- Events --> controller
+            controller -- Messages --> server
+            controller <--> sdk
+            workers <-- Datas --> controller
+        end
+        subgraph fpga [FPGA]
+            fft[FFT IP CORE]
+            firmware[Redpitaya FPGA Firmware]
+            custom[Custom HDL]
+        end
+        subgraph IOs [IOs]
+            leds[Led 0:7]
+            digital[Digital 0:16]
+            analog[Analog 0:7]
+            dac[DAC 0:1]
+            adc[ADC 0:1]
+        end
+        ram[RAM]
+
+        sdk <--> ram
+        IOs <--> ram
+        fpga <--> ram
+    end
+
+    api -- HTTP controller init request --> server
+    api <-- Websocket --> server
+```
+
+```mermaid
+---
+title: Example of led switch panel communication
+---
+sequenceDiagram
+    participant Panel as Led 7 Switch Panel
+    participant Pita as Pita API
+    participant Server as NGNIX Server
+    participant Controller as Controller
+    participant Led as Led 7
+
+    Pita->>Server: HTTP request to register controller
+    note right of Pita: Websocket only below
+    loop
+        Server-)Pita: Signals and Parameters
+    end
+    Panel->>Panel: Switch On
+    Panel-)Pita: Write state on led 7
+    Pita-)Server: Parameters for led state
+    Server->>Controller: Trigger parameters event
+    Controller->>Led: Write hight state on led 7
+```
 
 ## Contributing
 
