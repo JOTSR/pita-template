@@ -1,0 +1,43 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/alpine
+{
+	"name": "Pita",
+	"dockerFile": "Dockerfile",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"deno.enable": true,
+				"deno.unstable": false,
+				"explorer.fileNesting.enabled": true,
+				"explorer.fileNesting.patterns": {
+					"*.ts": "${capture}.test.ts,${capture}.js",
+					"*.js": "${capture}.js.map, ${capture}.*.js, ${capture}.d.ts",
+					"*.jsx": "${capture}.js, ${capture}.*.jsx",
+					"*.tsx": "${capture}.js, ${capture}.jsx, ${capture}.ts, ${capture}.*.tsx",
+					"tsconfig.json": "tsconfig.*.json",
+					"package.json": "package-lock.json, yarn.lock",
+					"deno.json*": "deno.lock"
+				},
+				"deno.codeLens.test": true,
+				"deno.suggest.imports.hosts": {
+					"https://deno.land": true,
+					"https://esm.sh": true
+				}
+			},
+			"extensions": [
+				"denoland.vscode-deno",
+                "rust-lang.rust-analyzer",
+                "yzhang.markdown-all-in-one",
+                "bierner.markdown-checkbox",
+                "bierner.markdown-emoji",
+                "bierner.markdown-footnotes",
+                "bierner.markdown-preview-github-styles",
+                "fisheva.eva-theme",
+                "ms-ceintl.vscode-language-pack-fr",
+                "yoavbls.pretty-ts-errors"
+			]
+		}
+	},
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "root"
+}
