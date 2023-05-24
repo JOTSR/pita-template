@@ -1,7 +1,6 @@
 import { IOMode, IOType, IO } from 'pita_api'
 import { useEffect, useState } from 'preact/hooks'
-import { Button } from '@components/Button.tsx'
-import { Panel } from "@components/Panel.tsx"
+import { Button, Panel } from '@components'
 
 export function ToggleSwitch(
 	{ title, pin, messageOn, messageOff }: {

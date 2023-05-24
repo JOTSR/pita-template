@@ -1,32 +1,29 @@
-/// <reference path="https://raw.githubusercontent.com/Kingwl/core-dts/main/src/proposals/stage-2/index.d.ts" />
-import 'core-js/stage/2'
-
 import { $, $$, required } from '@/frontend/src/utils.ts'
 import { render } from 'preact'
 import info from '@/www/info/info.json' assert { type: 'json' }
 import project from '@pita/project.json' assert { type: 'json' }
-import { ColorSchemeToggle } from '@components/ColorSchemeToggle.tsx'
-import { ToggleSwitch } from '@panels/ToggleSwitch.tsx'
-import { NumericMonitor } from '@panels/NumericMonitor.tsx'
+import { ColorSchemeToggle } from '@components'
+import { ToggleSwitch, NumericMonitor } from '@panels'
 import { Project } from 'pita_api'
 
 const redpitaya = await Project.init(project)
 
 required($('title')).innerText = info.name
 
-// app.addEventListener('open', () => {
-// 	required($('#connection-status')).innerHTML = '<i class="ri-link-m"></i>'
-// 	required($('#connection-status')).classList.remove('connect-status-alert')
-// })
-// app.addEventListener('close', () => {
-// 	required($('#connection-status')).innerHTML =
-// 		'<i class="ri-link-unlink-m"></i>'
-// 	required($('#connection-status')).classList.add('connect-status-alert')
-// })
+redpitaya.addEventListener('connect', () => {
+		required($('#connection-status')).innerHTML = '<i class="ri-link-m"></i>'
+		required($('#connection-status')).classList.remove('connect-status-alert')
+})
 
-// app.addEventListener('error', (event) => {
-// 	console.error('Websocket error: ', event)
-// })
+redpitaya.addEventListener('disconnect', () => {
+	required($('#connection-status')).innerHTML =
+		'<i class="ri-link-unlink-m"></i>'
+	required($('#connection-status')).classList.add('connect-status-alert')
+})
+
+redpitaya.addEventListener('error', (event) => {
+	console.error('Websocket error: ', event)
+})
 
 render(
 	<>

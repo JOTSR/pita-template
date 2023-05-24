@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'preact/hooks'
-import { Button } from '@components/Button.tsx'
-import { NumericDisplay } from '@components/NumericDisplay.tsx'
-import { Panel } from '@components/Panel.tsx'
+import { useState, useEffect } from 'preact/hooks'
+import { Panel, NumericDisplay, Button } from '@components'
 import { IO, IOMode, IOType } from "pita_api";
 
 export function NumericMonitor({ title, pin, unit, precision }: {
@@ -13,7 +11,16 @@ export function NumericMonitor({ title, pin, unit, precision }: {
 	const [active, setActive] = useState(false)
 	const [signalValue, setSignalValue] = useState(NaN)
 
+	useEffect(() => {
+		return () => {
+			pin.setActive(false)
+		}
+	}, [])
+
 	async function updateSignalValue() {
+		if (!pin.getActive()) {
+			await pin.setActive(true)
+		}
 		if (!active) return
 		setSignalValue(await pin.read())
 		requestAnimationFrame(updateSignalValue)
