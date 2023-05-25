@@ -5,6 +5,14 @@ import { MessageData, Signals, SignalDatas, Parameters, ParameterDatas } from 'h
 
 for await (const { event, socket } of serve(':9002')) {
 	try {
+		if (typeof event === 'object' && 'code' in event && 'reason' in event) {
+			console.log(
+				`%c⚠️ [client] %csocket closed with code ${event.code} due to "${event.reason}"`,
+				'color: gold; font-weight: bold',
+				'color: white; font-weight: normal',
+			)
+			continue
+		}
 		const message = JSON.parse(event.toString()) as MessageData
 		console.log(
 			`%c[client] %crecieving "${Object.keys(message).join(', ')}"`,
@@ -19,7 +27,7 @@ for await (const { event, socket } of serve(':9002')) {
 		console.error(
 			`%c❌ [ws] %c${String(error)}`,
 			'color: tomato; font-weight: bold',
-			'color: black',
+			'color: white',
 		)
 	}
 }
