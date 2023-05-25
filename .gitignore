@@ -38,3 +38,5 @@ backend/*.pdb
 # www - app root
 ##########
 # www/index.html
+
+deno.lock
