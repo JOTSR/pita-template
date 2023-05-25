@@ -7,22 +7,64 @@
 #include <sys/sysinfo.h>
 #include "main.h"
 
-//LEDs
-CBooleanParameter led0State("LED_0_STATE", CBaseParameter::RW, false, 0);
-CBooleanParameter led1State("LED_1_STATE", CBaseParameter::RW, false, 0);
-CBooleanParameter led2State("LED_2_STATE", CBaseParameter::RW, false, 0);
-CBooleanParameter led3State("LED_3_STATE", CBaseParameter::RW, false, 0);
-CBooleanParameter led4State("LED_4_STATE", CBaseParameter::RW, false, 0);
-CBooleanParameter led5State("LED_5_STATE", CBaseParameter::RW, false, 0);
-CBooleanParameter led6State("LED_6_STATE", CBaseParameter::RW, false, 0);
-CBooleanParameter led7State("LED_7_STATE", CBaseParameter::RW, false, 0);
+// Digital IOs
+class DigitalPin
+{
+public:
+    DigitalPin(std
+               : string name)
+    {
+        value = CBooleanParameter(fmt::format("digital_{}", name), CBaseParameter::RW, false, 0);
+        mode = CIntParameter(fmt::format("digital_{}#mode", name) CBaseParameter::RW, 0, 0, 0, 1);
+        ²
+    };
+    CBooleanParameter value;
+    CIntParameter mode;
+}
 
-//Slow inputs
-#define SIGNAL_SIZE_DEFAULT 1
-CFloatSignal ai0Value("AI_0", SIGNAL_SIZE_DEFAULT, 0.0f);
-CBooleanParameter ai0Trigger("AI_0", CBaseParameter::RW, false, 0);
+static struct
+{
+    static DigitalPin led[8];
+    static DigitalPin ioN[8];
+    static DigitalPin ioP[8];
+} digital;
 
-//Emitter
+for (int i = 0; i < 8; i++)
+{
+    digital.led[i] = DigitalPin(fmt::format("led_{}", i));
+    digital.ioN[i] = DigitalPin(fmt::format("io_{}_n", i));
+    digital.ioP[i] = DigitalPin(fmt::format("io_{}_p", i));
+}
+
+// Analog IOs
+class AnalogPin
+{
+public:
+    AnalogPin(std
+              : string type, uint8_t pin)
+    {
+        value = CIntSignal(fmt::format("analog_{}_{}", type, pin), 1, -1);
+        active = CBooleanParameter(fmt::format("analog_{}_{}#active", type, pin), CBaseParameter::RW, false, 0);
+        bitness = CIntParameter(fmt::format("analog_{}_{}#active", type, pin), CBaseParameter::RW, 1, 0, 1, 12);
+    };
+    CIntSignal value;
+    CBooleanParameter active;
+    CIntParameter bitness;
+}
+
+static struct
+{
+    static AnalogPin out[] = {
+        AnalogPin("out", 0),
+        AnalogPin("out", 1),
+        AnalogPin("out", 2)};
+    static AnalogPin in[] = {
+        AnalogPin("int", 0),
+        AnalogPin("int", 1),
+        AnalogPin("int", 2)}
+} analog;
+
+// Emitter
 const char *rp_app_desc(void)
 {
     return (const char *)"Template application.\n";
@@ -31,14 +73,16 @@ const char *rp_app_desc(void)
 int rp_app_init(void)
 {
     fprintf(stderr, "Loading LED control\n");
-    CDataManager::GetInstance()->SetSignalInterval(10);
+    CDataManager::GetInstance()->SetSignalInterval(100);
+    CDataManager::GetInstance()->SetParamInterval(100);
     // Initialization of API
-    if (rpApp_Init() != RP_OK) 
+    if (rpApp_Init() != RP_OK)
     {
         fprintf(stderr, "Red Pitaya API init failed!\n");
         return EXIT_FAILURE;
     }
-    else fprintf(stderr, "Red Pitaya API init success!\n");
+    else
+        fprintf(stderr, "Red Pitaya API init success!\n");
     return 0;
 }
 
@@ -64,111 +108,94 @@ int rp_get_signals(float ***s, int *sig_num, int *sig_len)
     return 0;
 }
 
-//Listener
-void UpdateSignals(void){
-    if (ai0Trigger.Value()) {
-        float val;
-        rp_AIpinGetValue(0, &val);
-        ai0Value[0] = val;
-        // slowTrigger.Set(false);
-    }
-}
-
-void UpdateParams(void){}
-
-void OnNewParams(void) 
+// Listener
+void UpdateSignals(void)
 {
-    //Slow
-    ai0Trigger.Update();
-    // if (ai0Trigger.Value()) {
-    //     float val;
-    //     rp_AIpinGetValue(0, &val);
-    //     ai0Value[0] = val;
-    //     // slowTrigger.Set(false);
-    // }
-
-    //Leds
-    led0State.Update();
-    if (led0State.Value() == false)
+    // Analog IOs
+    for (int i = 0; i < 4; i++)
     {
-        rp_DpinSetState(RP_LED0, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED0, RP_HIGH); 
-    }
-
-    led1State.Update();
-    if (led1State.Value() == false)
-    {
-        rp_DpinSetState(RP_LED1, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED1, RP_HIGH); 
-    }
-
-    led2State.Update();
-    if (led2State.Value() == false)
-    {
-        rp_DpinSetState(RP_LED2, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED2, RP_HIGH); 
-    }
-
-    led3State.Update();
-    if (led3State.Value() == false)
-    {
-        rp_DpinSetState(RP_LED3, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED3, RP_HIGH); 
-    }
-
-    led4State.Update();
-    if (led4State.Value() == false)
-    {
-        rp_DpinSetState(RP_LED4, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED4, RP_HIGH); 
-    }
-
-    led5State.Update();
-    if (led5State.Value() == false)
-    {
-        rp_DpinSetState(RP_LED5, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED5, RP_HIGH); 
-    }
-
-    led6State.Update();
-    if (led6State.Value() == false)
-    {
-        rp_DpinSetState(RP_LED6, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED6, RP_HIGH); 
-    }
-
-    led7State.Update();
-    if (led7State.Value() == false)
-    {
-        rp_DpinSetState(RP_LED7, RP_LOW); 
-    }
-    else
-    {
-        rp_DpinSetState(RP_LED7, RP_HIGH); 
+        if (analog.in[i].active.Value())
+        {
+            uint32_t value;
+            rp_AIpinGetValueRaw(RP_AIN0 + i, &value);
+            analog.in[i].value[0] = value;
+        }
     }
 }
 
-void OnNewSignals(void){}
+void UpdateParams(void)
+{
+    // Digital IOs
+    for (int i = 0; i < 8; i++)
+    {
+        // IO_Ns
+        digital.ioN[i].mode.Update();
+        if (digital.ioN[i].mode.Value() == 1)
+        {
+            rp_DpinSetDirection(RP_DIO0N + i, RP_IN);
+            rp_pin_state state;
+            rp_DpinGetState(RP_DIO0_N + i, &state);
+            digital.ioN[i].value = (state == RP_HIGH);
+        }
+        // IO_Ps
+        digital.ioP[i].mode.Update();
+        if (digital.ioP[i].mode.Value() == 1)
+        {
+            rp_DpinSetDirection(RP_DIO0P + i, RP_IN);
+            rp_pin_state state;
+            rp_DpinGetState(RP_DIO0_P + i, &state);
+            digital.ioP[i].value = (state == RP_HIGH);
+        }
+    }
+}
 
-void PostUpdateSignals(void){}
+void OnNewParams(void)
+{
+    // Digital IOs
+    for (int i = 0; i < 8; i++)
+    {
+        // LEDs
+        digital.led[i].value.Update();
+        if (digital.led[i].value.Value())
+            rp_DpinSetState(RP_LED0 + i, RP_HIGH);
+        else
+            rp_DpinSetState(RP_LED0 + i, RP_LOW);
+        // IO_Ns
+        digital.ioN[i].mode.Update();
+        if (digital.ioN[i].mode.Value() == 0)
+        {
+            rp_DpinSetDirection(RP_DIO0N + i, RP_OUT);
+            digital.ioN[i].value.Update();
+            if (digital.ioN[i].value.Value())
+                rp_DpinSetState(RP_DIO0_N + i, RP_HIGH);
+            else
+                rp_DpinSetState(RP_DIO0_N + i, RP_LOW);
+        }
+        // IO_Ps
+        digital.ioP[i].mode.Update();
+        if (digital.ioP[i].mode.Value() == 0)
+        {
+            rp_DpinSetDirection(RP_DIO0P + i, RP_OUT);
+            digital.ioP[i].value.Update();
+            if (digital.ioP[i].value.Value())
+                rp_DpinSetState(RP_DIO0_P + i, RP_HIGH);
+            else
+                rp_DpinSetState(RP_DIO0_P + i, RP_LOW);
+        }
+    }
+}
+
+void OnNewSignals(void)
+{
+    // Analog IOs
+    for (int i = 0; i < 4; i++)
+    {
+        analog.out[i].active.Update() if (analog.out[i].active.Value())
+        {
+            analog.out[i].value.Update();
+            rp_AOpinSetValueRaw(RP_AOUT0 + i, analog.out[i].value.Value());
+        }
+    }
+}
+
+void PostUpdateSignals(void) {}
