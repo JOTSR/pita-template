@@ -1,15 +1,11 @@
 import { serve } from 'https://deno.land/x/websocket_server@1.0.2/mod.ts'
-import {
-	Foras,
-	gzip,
-} from 'https://deno.land/x/denoflate@2.0.8/src/deno/mod.ts'
 import { colorize } from 'https://deno.land/x/json_colorizer@0.1.1/mod.ts'
-
-Foras.initSyncBundledOnce()
+import { gzipEncode } from 'https://deno.land/x/wasm_gzip@v1.0.0/mod.ts' 
+import { MessageData, Signals, SignalDatas, Parameters, ParameterDatas } from 'https://deno.land/x/pita_api@0.6.1/types.ts'
 
 for await (const { event, socket } of serve(':9002')) {
 	try {
-		const message = JSON.parse(event.toString()) as Message
+		const message = JSON.parse(event.toString()) as MessageData
 		console.log(
 			`%c[client] %crecieving "${Object.keys(message).join(', ')}"`,
 			'color: royalblue; font-weight: bold',
@@ -28,40 +24,32 @@ for await (const { event, socket } of serve(':9002')) {
 	}
 }
 
-function gzipJson(data: Message): Uint8Array {
-	// return new TextEncoder().encode(JSON.stringify(data))
-	return gzip(new TextEncoder().encode(JSON.stringify(data)))
+function gzipJson(data: MessageData): Uint8Array {
+	return gzipEncode(new TextEncoder().encode(JSON.stringify(data)))
 }
 
-type Message<T extends 'signals' | 'parameters' | undefined = undefined> =
-	T extends 'signals' ? Signals
-		: T extends 'parameters' ? Parameters
-		: Signals | Parameters
-type Signals = { signals: Record<string, SignalDatas> }
-type SignalDatas = { size: number; value: number[] }
-type Parameters = { parameters: Record<string, ParameterDatas> }
-type ParameterDatas = { value: number | boolean }
-
 function* mockMessage(
-	datas: Message,
+	datas: MessageData,
 ): Generator<Signals | Parameters, void, unknown> {
 	if ('signals' in datas) {
 		for (
 			const [type, mapped] of Object.entries(datas.signals).map(
+				//@ts-ignore to fix
 				mockSignals,
 			)
 		) {
-			yield { [type]: Object.fromEntries([mapped]) } as Message<
+			yield { [type]: Object.fromEntries([mapped]) } as MessageData<
 				typeof type
 			>
 		}
 	} else if ('parameters' in datas) {
 		for (
 			const [type, mapped] of Object.entries(datas.parameters).map(
+				//@ts-ignore to fix
 				mockParameters,
 			)
 		) {
-			yield { [type]: Object.fromEntries([mapped]) } as Message<
+			yield { [type]: Object.fromEntries([mapped]) } as MessageData<
 				typeof type
 			>
 		}
@@ -81,19 +69,18 @@ type Mock = ['signals', [string, SignalDatas]] | [
 	[string, ParameterDatas],
 ]
 
-//deno-lint-ignore no-unused-vars
-function mockSignals([key, datas]: [string, SignalDatas]): Mock {
-	if (key === 'ai_0_signal') {
-		return ['signals', ['ai_0_signal', { size: 1, value: [0] }]]
+function mockSignals([key, _datas]: [string, SignalDatas]): Mock {
+	if (key.startsWith('analog')) {
+		return ['signals', [key, { size: 1, value: [0] }]]
 	}
 	throw new Error(`"${key}" mock is not implemented`)
 }
 
 function mockParameters([key, datas]: [string, ParameterDatas]): Mock {
-	if (key === 'AI_0') {
-		return ['signals', ['AI_0', { size: 1, value: [Math.random()] }]]
+	if (key.startsWith('analog')) {
+		return ['signals', [key, { size: 1, value: [Math.random()] }]]
 	}
-	if (key.startsWith('LED_')) {
+	if (key.startsWith('digital')) {
 		return ['parameters', [key, datas]]
 	}
 	throw new Error(`"${key}" mock is not implemented`)

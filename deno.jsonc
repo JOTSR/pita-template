@@ -18,7 +18,7 @@
 		"bench:back": "echo 'not implemented'",
 		"bench:fpga": "echo 'not implemented'",
 		//mock
-		"mock:front": "deno run -A .pita/tasks/mock_front/serve.ts & deno run -A .pita/tasks/mock_front/ws.ts",
+		"mock:front": "deno run -A .pita/tasks/mocks/frontend/serve.ts & deno run -A .pita/tasks/mocks/frontend/ws.ts",
 		"mock:back": "echo 'not implemented'",
 		"mock:fpga": "echo 'not implemented'"
 	},
