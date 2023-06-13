@@ -10,10 +10,8 @@ const redpitaya = await Project.init(project)
 
 required($('title')).innerText = info.name
 
-redpitaya.addEventListener('connect', () => {
-		required($('#connection-status')).innerHTML = '<i class="ri-link-m"></i>'
-		required($('#connection-status')).classList.remove('connect-status-alert')
-})
+required($('#connection-status')).innerHTML = '<i class="ri-link-m"></i>'
+required($('#connection-status')).classList.remove('connect-status-alert')
 
 redpitaya.addEventListener('disconnect', () => {
 	required($('#connection-status')).innerHTML =
