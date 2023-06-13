@@ -10,6 +10,6 @@
 		"@components": "./frontend/components/mod.ts",
 		"@panels": "./frontend/panels/mod.ts",
 		"core-js/": "https://esm.sh/core-js@3.30.2/",
-		"pita_api": "https://deno.land/x/pita_api@0.6.1/mod.ts"
+		"pita_api": "https://deno.land/x/pita_api@0.7.0/mod.ts"
 	}
 }
