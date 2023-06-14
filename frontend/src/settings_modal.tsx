@@ -27,21 +27,22 @@ const style = /*css*/ `
 
     .d0r-table th,
     .d0r-table td {
-        padding: 0.2rem;
+        padding: 0.4rem;
         border: solid calc(var(--border-width) / 2) var(--bg-color-secondary);
     }
 
     .d0r-table tbody th {
-        border-color: white;
+        border-color: var(--bg-color);
     }
 
     .d0r-form {
         width: 100%;
         display: grid;
+		padding: 0.4rem;
     }
 
     .d0r-div {
-        padding: 0.4rem 0.2rem;
+        padding: 0.4rem;
         display: grid;
         gap: 0.4rem;
     }

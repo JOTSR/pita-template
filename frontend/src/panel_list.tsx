@@ -14,36 +14,36 @@ const style = /*css*/ `
     .pf90-box {
         overflow-y: scroll;
         display: grid;
-        gap: 0.2rem;
-        padding: 0.2rem;
+        gap: 0.4rem;
+        padding: 0.4rem;
     }
 
     .pf90-item {
-        border: solid 0.2rem #ecdaaf;
+        border: solid 0.2rem var(--bg-color-secondary);
         border-radius: 0.4rem;
-        padding: 0.2rem;
+        padding: 0.4rem;
         display: flex;
-        gap: 0.2rem;
+        gap: 0.4rem;
         justify-content: space-between;
         align-items: center;
     }
 
     .pf90-item span {
-        padding: 0.2rem;
+        padding: 0.4rem;
         user-select: none;
     }
 
     .pf90-menu {
         width: 100%;
-        padding: 0.2rem;
+        padding: 0 0.4rem 0.4rem 0.4rem;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 0.2rem;
+        gap: 0.4rem;
     }
 
     .pf90-form {
         display: grid;
-        gap: 0.2rem;
+        gap: 0.4rem;
         width: 100%;
         max-height: 70%;
     }

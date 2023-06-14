@@ -70,7 +70,7 @@ main {
 }
 
 .button {
-	padding: 0.2rem;
+	padding: 0.4rem;
 	font-size: 1.2rem;
 	font-family: var(--main-font);
 	border-radius: 0.4rem;
@@ -196,20 +196,21 @@ dialog {
 	border-radius: var(--border-radius);
 	border: solid var(--border-width) var(--bg-color-secondary);
 	background-color: var(--bg-color);
+	color: var(--font-color);
 	box-shadow: 0 0 0.4rem 0.2rem rgba(0, 0, 0, 0.2);
 	padding: 0;
 }
 
 dialog:fullscreen {
 	display: grid;
-	gap: 0.2rem;
+	gap: 0.4rem;
 }
 
 .dialog-title {
 	background-color: var(--bg-color-secondary);
 	text-align: center;
 	width: 100%;
-	padding: 0.2rem;
+	padding: 0.4rem;
 	display: block;
 }
 
@@ -239,6 +240,52 @@ input:focus {
 
 label {
 	display: grid;
-	gap: 0.2rem;
-	padding: 0.2rem 0;
+	gap: 0.4rem;
+	padding: 0.4rem 0;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+	appearance: none;
+	width: 1.5rem;
+	height: 1.5rem;
+	background-color: var(--bg-color);
+	border: solid var(--border-width) var(--bg-color-secondary);
+	border-radius: var(--border-radius);
+	cursor: pointer;
+	padding: 0.2rem;
+}
+
+input[type="radio"] {
+	border-radius: 100%;
+}
+
+input[type="radio"]::before {
+	border-radius: 100%;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+	border: solid var(--border-width) var(--accent-color);
+}
+
+input[type="checkbox"]::before,
+input[type="radio"]::before {
+	content: "";
+	display: block;
+	transform: scale(0);
+	height: 0.7rem;
+	width: 0.7rem;
+	box-shadow: inset 0 1rem var(--accent-color);
+}
+
+input[type="checkbox"]:checked::before,
+input[type="radio"]:checked::before {
+	transform: scale(1);
+}
+
+input:focus,
+button:focus {
+	outline: none;
+	box-shadow: 0 0 0 0.2rem var(--bg-color), 0 0 0 0.4rem var(--bg-color-secondary);
 }
