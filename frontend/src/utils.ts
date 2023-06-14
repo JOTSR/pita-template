@@ -1,3 +1,5 @@
+import { hydrate, JSX } from 'preact'
+
 /**
  * Returns the first element that is a descendant of node that matches selectors.
  * @param {T} selectors - List of html selectors.
@@ -91,3 +93,17 @@ export function upwardSelector<T extends HTMLElement = HTMLElement>(
 
 export const globalState = new Map<string, unknown>()
 
+/**
+ * This function adds a new panel builder to the main element.
+ */
+export function addPanelBuilder(element: JSX.Element) {
+	const main = required($('main'))
+	const sibling = main.appendChild(document.createElement('template'))
+	hydrate(
+		element,
+		sibling,
+	)
+	sibling.replaceWith(...sibling.childNodes)
+	const lastChild = main.lastElementChild! as HTMLElement
+	lastChild.style.order = String(main.children.length)
+}

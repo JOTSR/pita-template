@@ -10,6 +10,9 @@
 	--font-color: rgb(31, 13, 63);
 	--accent-color: rgb(115, 60, 215);
 	accent-color: var(--accent-color);
+
+	--border-radius: 0.4rem;
+	--border-width: 0.2rem;
 }
 
 
@@ -69,7 +72,7 @@ main {
 	font-size: 1.2rem;
 	font-family: var(--main-font);
 	border-radius: 0.4rem;
-	border: solid 0.2rem transparent;
+	border: solid var(--border-width) transparent;
 	transition: all 0.2s ease;
 	user-select: none;
 }
@@ -77,7 +80,7 @@ main {
 .button-primary {
 	background-color: var(--accent-color);
 	color: var(--bg-color);
-	border: solid 0.2rem var(--accent-color);
+	border: solid var(--border-width) var(--accent-color);
 }
 
 .button-primary:active {
@@ -87,7 +90,7 @@ main {
 
 .button-secondary {
 	background-color: var(--bg-color-secondary);
-	border: solid 0.2rem var(--bg-color-secondary);
+	border: solid var(--border-width) var(--bg-color-secondary);
 }
 
 .button-secondary:active {
@@ -104,10 +107,10 @@ input[type='radio'] {
 
 .panel {
 	display: grid;
-	border-radius: 0.4rem;
+	border-radius: var(--border-radius);
 	background-color: var(--bg-transparency);
 	backdrop-filter: blur(0.2rem);
-	border: solid 0.2rem var(--bg-color-secondary);
+	border: solid var(--border-width) var(--bg-color-secondary);
 	/* resize: both; */
 	min-width: 10rem;
 	overflow: scroll;
@@ -123,7 +126,7 @@ input[type='radio'] {
 }
 
 .panel_ondragover {
-	border: dashed 0.2rem var(--accent-color);
+	border: dashed var(--border-width) var(--accent-color);
 }
 
 .panel-header {
@@ -154,11 +157,20 @@ menu {
 	margin: 0;
 	padding: 0.4rem;
 	justify-content: space-between;
+	z-index: 999;
 }
 
 menu>span {
 	display: grid;
 	align-items: center;
+	padding: 0.2rem 0.3rem;
+	border-radius: 100%;
+	transition: all 0.2s ease;
+}
+
+menu>span:hover,
+menu>span:active {
+	background-color: #ecdaaf;
 }
 
 .connect-status {
@@ -176,4 +188,55 @@ menu>span {
 .numeric_display {
 	display: grid;
 	grid-template-columns: 1fr 2rem;
+}
+
+dialog {
+	border-radius: var(--border-radius);
+	border: solid var(--border-width) var(--bg-color-secondary);
+	background-color: var(--bg-color);
+	box-shadow: 0 0 0.4rem 0.2rem rgba(0, 0, 0, 0.2);
+	padding: 0;
+}
+
+dialog:fullscreen {
+	display: grid;
+	gap: 0.2rem;
+}
+
+.dialog-title {
+	background-color: var(--bg-color-secondary);
+	text-align: center;
+	width: 100%;
+	padding: 0.2rem;
+	display: block;
+}
+
+dialog::backdrop {
+	backdrop-filter: blur(0.2rem);
+}
+
+.panel_builder-form {
+	display: grid;
+	overflow-y: scroll;
+	height: 100%;
+	max-height: 100%;
+}
+
+input {
+	border-radius: var(--border-radius);
+	border: solid var(--border-width) var(--bg-color-secondary);
+	background-color: transparent;
+	padding: 0.4rem;
+	color: rgba(127, 127, 127, 0.8);
+	transition: all 0.2s ease;
+}
+
+input:focus {
+	color: var(--font-color);
+}
+
+label {
+	display: grid;
+	gap: 0.2rem;
+	padding: 0.2rem 0;
 }
