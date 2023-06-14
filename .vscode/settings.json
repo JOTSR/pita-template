@@ -86,5 +86,8 @@
 		"xtree": "cpp",
 		"xutility": "cpp"
 	},
-	"C_Cpp.errorSquiggles": "disabled"
+	"C_Cpp.errorSquiggles": "disabled",
+	"conventionalCommits.scopes": [
+		"ui"
+	]
 }
