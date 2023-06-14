@@ -6,10 +6,10 @@ export function ColorSchemeToggle() {
 	function updateColorScheme() {
 		setColorScheme(!colorScheme)
 		document.body.classList.add(
-			`perfers-color-${colorScheme ? 'dark' : 'light'}`,
+			`prefers-color-scheme-${colorScheme ? 'dark' : 'light'}`,
 		)
 		document.body.classList.remove(
-			`perfers-color-${colorScheme ? 'light' : 'dark'}`,
+			`prefers-color-scheme-${colorScheme ? 'light' : 'dark'}`,
 		)
 	}
 	return (
