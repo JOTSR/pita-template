@@ -2,7 +2,7 @@ import * as Panels from '@panels'
 import { render } from 'preact'
 import { $, addPanelBuilder, required } from '@/frontend/src/utils.ts'
 import { Button } from '@components'
-import { PanelBuilder } from '../panels/src/PanelBuilder.tsx'
+import { PanelBuilder } from '@/frontend/panels/src/PanelBuilder.tsx'
 
 const dialog = required($<HTMLDialogElement>('#panel-list-modal'))
 required($('#panel-list-button')).addEventListener(
@@ -63,8 +63,8 @@ render(
 				))}
 			</div>
 			<div className='pf90-menu'>
-				<Button variant='secondary'>Annuler</Button>
-				<Button variant='primary'>Ajouter</Button>
+				<Button variant='secondary' data-value='cancel'>Annuler</Button>
+				<Button variant='primary' data-value='add'>Ajouter</Button>
 			</div>
 		</form>
 	</>,
@@ -73,6 +73,13 @@ render(
 
 function addPanels(event: Event) {
 	const form = event.target as HTMLFormElement
+
+	if ((event as SubmitEvent).submitter?.dataset.value === 'cancel') {
+		event.preventDefault()
+		form.reset()
+		;(form.parentElement as HTMLDialogElement)?.close()
+	}
+
 	const formData = new FormData(form)
 	for (
 		const panelName of formData.keys() as IterableIterator<
