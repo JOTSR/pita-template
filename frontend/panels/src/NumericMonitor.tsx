@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'preact/hooks'
-import { Panel, NumericDisplay, Button } from '@components'
-import { IO, IOMode, IOType } from "pita_api";
+import { Button, NumericDisplay, Panel } from '@components'
+import { IO, IOMode, IOType } from 'pita_api'
+import { useEffect, useState } from 'preact/hooks'
 
 export function NumericMonitor({ title, pin, unit, precision }: {
 	title: string
-	pin: IO<IOMode.RO | IOMode.RW, IOType.Analog>,
+	pin: IO<IOMode.RO | IOMode.RW, IOType.Analog>
 	unit: string
 	precision: number
 }) {
