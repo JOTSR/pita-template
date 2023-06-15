@@ -1,4 +1,4 @@
-import { redpitaya } from '@/frontend/app.tsx'
+import { redpitaya } from '@/frontend/src/redpitaya.ts'
 import { Button, Panel } from '@components'
 import { Builder } from '@types'
 import { IO, IOMode, IOType } from 'pita_api'

@@ -1,7 +1,7 @@
 import { Button } from '@/frontend/components/src/Button.tsx'
-import { $, required } from '@/frontend/src/utils.ts'
 import info from '@/www/info/info.json' assert { type: 'json' }
 import project from '@pita/project.json' assert { type: 'json' }
+import { $, required } from '@utils'
 import { render } from 'preact'
 
 const dialog = required($<HTMLDialogElement>('#settings-modal'))

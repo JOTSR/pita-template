@@ -1,8 +1,8 @@
-import * as Panels from '@panels'
-import { render } from 'preact'
-import { $, addPanelBuilder, required } from '@/frontend/src/utils.ts'
-import { Button } from '@components'
 import { PanelBuilder } from '@/frontend/panels/src/PanelBuilder.tsx'
+import { Button } from '@components'
+import * as Panels from '@panels'
+import { $, addPanelBuilder, required } from '@utils'
+import { render } from 'preact'
 
 const dialog = required($<HTMLDialogElement>('#panel-list-modal'))
 required($('#panel-list-button')).addEventListener(

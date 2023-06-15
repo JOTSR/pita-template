@@ -1,29 +1,8 @@
-import '@/frontend/src/panel_list.tsx'
-import '@/frontend/src/settings_modal.tsx'
-import { $, $$, required } from '@/frontend/src/utils.ts'
-import info from '@/www/info/info.json' assert { type: 'json' }
-import { ColorSchemeToggle } from '@components'
+import { redpitaya } from '@/frontend/src/redpitaya.ts'
 import { NumericMonitor, ToggleSwitch } from '@panels'
-import project from '@pita/project.json' assert { type: 'json' }
-import { Project } from 'pita_api'
+import { $, $$, required } from '@utils'
+import '@views'
 import { render } from 'preact'
-
-export const redpitaya = await Project.init(project)
-
-required($('title')).innerText = info.name
-
-required($('#connection-status')).innerHTML = '<i class="ri-link-m"></i>'
-required($('#connection-status')).classList.remove('connect-status-alert')
-
-redpitaya.addEventListener('disconnect', () => {
-	required($('#connection-status')).innerHTML =
-		'<i class="ri-link-unlink-m"></i>'
-	required($('#connection-status')).classList.add('connect-status-alert')
-})
-
-redpitaya.addEventListener('error', (event) => {
-	console.error('Websocket error: ', event)
-})
 
 render(
 	<>
@@ -87,5 +66,3 @@ render(
 
 //Initialize drag order
 $$('.panel').map((panel, index) => panel.style.order = String(index))
-
-render(<ColorSchemeToggle />, required($('#color-scheme-toggle')))
