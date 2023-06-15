@@ -1,5 +1,5 @@
 import { redpitaya } from '@/frontend/src/redpitaya.ts'
-import { NumericMonitor, ToggleSwitch } from '@panels'
+import { DataLogger, NumericMonitor, ToggleSwitch } from '@panels'
 import { $, $$, required } from '@utils'
 import '@views'
 import { render } from 'preact'
@@ -59,6 +59,10 @@ render(
 			pin={redpitaya.pin.analog.in1}
 			unit='V'
 			precision={5}
+		/>
+		<DataLogger
+			title='Log and draw'
+			pin={redpitaya.pin.analog.in2}
 		/>
 	</>,
 	required($('main')),
