@@ -2,7 +2,7 @@ import { JSX } from 'preact'
 
 export function Button(
 	{ variant, children, ...props }: JSX.HTMLAttributes<HTMLButtonElement> & {
-		variant: 'secondary' | 'primary'
+		variant: 'secondary' | 'primary' | 'alert'
 	},
 ) {
 	return (
