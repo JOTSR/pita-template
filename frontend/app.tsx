@@ -1,12 +1,14 @@
+import '@/frontend/src/panel_list.tsx'
+import '@/frontend/src/settings_modal.tsx'
 import { $, $$, required } from '@/frontend/src/utils.ts'
-import { render } from 'preact'
 import info from '@/www/info/info.json' assert { type: 'json' }
-import project from '@pita/project.json' assert { type: 'json' }
 import { ColorSchemeToggle } from '@components'
-import { ToggleSwitch, NumericMonitor } from '@panels'
+import { NumericMonitor, ToggleSwitch } from '@panels'
+import project from '@pita/project.json' assert { type: 'json' }
 import { Project } from 'pita_api'
+import { render } from 'preact'
 
-const redpitaya = await Project.init(project)
+export const redpitaya = await Project.init(project)
 
 required($('title')).innerText = info.name
 
