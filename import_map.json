@@ -12,6 +12,6 @@
 		"@utils": "./frontend/src/utils.ts",
 		"@views": "./frontend/views/mod.ts",
 		"core-js/": "https://esm.sh/core-js@3.30.2/",
-		"pita_api": "https://deno.land/x/pita_api@0.7.0/mod.ts"
+		"pita_api": "https://deno.land/x/pita_api@0.8.0/mod.ts"
 	}
 }
