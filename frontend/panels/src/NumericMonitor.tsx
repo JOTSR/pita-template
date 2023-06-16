@@ -12,16 +12,14 @@ export function NumericMonitor({ title, pin, unit, precision }: {
 	const [signalValue, setSignalValue] = useState(NaN)
 
 	useEffect(() => {
+		pin.setActive(active)
 		return () => {
 			pin.setActive(false)
 		}
-	}, [])
+	}, [active])
 
 	async function updateSignalValue() {
-		if (!pin.getActive()) {
-			await pin.setActive(true)
-		}
-		if (!active) return
+		if (!active || !pin.getActive()) return
 		setSignalValue(await pin.read())
 		requestAnimationFrame(updateSignalValue)
 	}
