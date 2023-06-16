@@ -82,6 +82,10 @@ main {
 	user-select: none;
 }
 
+.button:disabled {
+	filter: grayscale(0.6) brightness(0.8) opacity(0.8);
+}
+
 .button-primary {
 	background-color: var(--accent-color);
 	color: var(--bg-color);
