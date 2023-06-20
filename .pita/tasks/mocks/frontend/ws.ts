@@ -7,10 +7,13 @@ import {
 	SignalDatas,
 	Signals,
 } from 'https://deno.land/x/pita_api@0.6.1/types.ts'
-// import { gzipEncode } from 'https://deno.land/x/wasm_gzip@v1.0.0/mod.ts'
 import { serve } from 'https://deno.land/x/websocket_server@1.0.2/mod.ts'
+import { random, randomInt } from 'https://deno.land/x/denum@v1.2.0/mod.ts'
 //@ts-ignore e
-const ds = new CompressionStream("gzip") as { readable: ReadableStream<Uint8Array>, writable: WritableStream<ArrayBuffer> }
+const ds = new CompressionStream('gzip') as {
+	readable: ReadableStream<Uint8Array>
+	writable: WritableStream<ArrayBuffer>
+}
 const writer = ds.writable.getWriter()
 const reader = ds.readable.getReader()
 
@@ -49,9 +52,9 @@ for await (const { event, socket } of serve(':9002')) {
 }
 
 export async function gzipEncode(buffer: ArrayBuffer) {
-    writer.write(buffer)
-    const { value } = await reader.read()
-    return value!
+	writer.write(buffer)
+	const { value } = await reader.read()
+	return value!
 }
 
 function gzipJson(data: MessageData): Promise<Uint8Array> {
@@ -131,9 +134,18 @@ function activateFakeSignal(
 		analogInInterval.set(
 			key,
 			setInterval(() => {
-				console.log(Math.sin(Date.now() / 100))
+				const signal = random(0.8, 1.2) *
+					Math.sin(Date.now() / randomInt(80, 120))
+				console.log(
+					`%c[ws] %csending signal (%c${signal}%c) to "${key}"`,
+					'color: royalblue; font-weight: bold',
+					'color: white; font-weight: normal',
+					'color: gold; font-weight: bold',
+					'color: white; font-weight: normal',
+				)
+				console.log()
 				sendFakeSignal(socket, key.split('#')[0] as MessageId, [
-					Math.sin(Date.now() / 100),
+					signal,
 				])
 			}, 500),
 		)
