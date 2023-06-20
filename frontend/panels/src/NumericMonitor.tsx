@@ -12,18 +12,16 @@ export function NumericMonitor({ title, pin, unit, precision }: {
 	const [signalValue, setSignalValue] = useState(NaN)
 
 	useEffect(() => {
-		pin.setActive(active)
 		return () => {
 			pin.setActive(false)
 		}
-	}, [active])
+	}, [])
 
 	async function updateSignalValue() {
-		if (!active || !pin.getActive()) return
+		if (!pin.getActive()) return
 		setSignalValue(await pin.read())
 		requestAnimationFrame(updateSignalValue)
 	}
-	requestAnimationFrame(updateSignalValue)
 
 	return (
 		<Panel title={title} size={[1, 1]}>
@@ -34,8 +32,9 @@ export function NumericMonitor({ title, pin, unit, precision }: {
 			/>
 			<Button
 				variant='primary'
-				onClick={() => {
+				onClick={async () => {
 					setActive(!active)
+					await pin.setActive(!active)
 					requestAnimationFrame(updateSignalValue)
 				}}
 			>
