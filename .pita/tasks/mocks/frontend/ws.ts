@@ -1,9 +1,25 @@
-import { serve } from 'https://deno.land/x/websocket_server@1.0.2/mod.ts'
 import { colorize } from 'https://deno.land/x/json_colorizer@0.1.1/mod.ts'
-import { gzipEncode } from 'https://deno.land/x/wasm_gzip@v1.0.0/mod.ts' 
-import { MessageData, Signals, SignalDatas, Parameters, ParameterDatas } from 'https://deno.land/x/pita_api@0.6.1/types.ts'
+import {
+	MessageData,
+	MessageId,
+	ParameterDatas,
+	Parameters,
+	SignalDatas,
+	Signals,
+} from 'https://deno.land/x/pita_api@0.6.1/types.ts'
+// import { gzipEncode } from 'https://deno.land/x/wasm_gzip@v1.0.0/mod.ts'
+import { serve } from 'https://deno.land/x/websocket_server@1.0.2/mod.ts'
+//@ts-ignore e
+const ds = new CompressionStream("gzip") as { readable: ReadableStream<Uint8Array>, writable: WritableStream<ArrayBuffer> }
+const writer = ds.writable.getWriter()
+const reader = ds.readable.getReader()
+
+const analogInInterval: Map<string, number> = new Map()
+let socketMain: WebSocket
 
 for await (const { event, socket } of serve(':9002')) {
+	//@ts-ignore temp
+	socketMain = socket
 	try {
 		if (typeof event === 'object' && 'code' in event && 'reason' in event) {
 			console.log(
@@ -21,7 +37,7 @@ for await (const { event, socket } of serve(':9002')) {
 		)
 		console.log(colorize(JSON.stringify(message, null, 2)))
 		for (const mock of mockMessage(message)) {
-			socket.send(gzipJson(mock))
+			socket.send(await gzipJson(mock))
 		}
 	} catch (error) {
 		console.error(
@@ -32,7 +48,13 @@ for await (const { event, socket } of serve(':9002')) {
 	}
 }
 
-function gzipJson(data: MessageData): Uint8Array {
+export async function gzipEncode(buffer: ArrayBuffer) {
+    writer.write(buffer)
+    const { value } = await reader.read()
+    return value!
+}
+
+function gzipJson(data: MessageData): Promise<Uint8Array> {
 	return gzipEncode(new TextEncoder().encode(JSON.stringify(data)))
 }
 
@@ -72,19 +94,25 @@ function* mockMessage(
 	}
 }
 
-type Mock = ['signals', [string, SignalDatas]] | [
+type Mock = ['signals', [MessageId, SignalDatas]] | [
 	'parameters',
-	[string, ParameterDatas],
+	[MessageId, ParameterDatas],
 ]
 
-function mockSignals([key, _datas]: [string, SignalDatas]): Mock {
+function mockSignals([key, _datas]: [MessageId, SignalDatas]): Mock {
 	if (key.startsWith('analog')) {
 		return ['signals', [key, { size: 1, value: [0] }]]
 	}
 	throw new Error(`"${key}" mock is not implemented`)
 }
 
-function mockParameters([key, datas]: [string, ParameterDatas]): Mock {
+function mockParameters([key, datas]: [MessageId, ParameterDatas]): Mock {
+	if ((/analog_in_\d#active/).test(key)) {
+		activateFakeSignal(socketMain, key, datas)
+	}
+	if (key.includes('#')) {
+		return ['parameters', [key, datas]]
+	}
 	if (key.startsWith('analog')) {
 		return ['signals', [key, { size: 1, value: [Math.random()] }]]
 	}
@@ -92,4 +120,42 @@ function mockParameters([key, datas]: [string, ParameterDatas]): Mock {
 		return ['parameters', [key, datas]]
 	}
 	throw new Error(`"${key}" mock is not implemented`)
+}
+
+function activateFakeSignal(
+	socket: WebSocket,
+	key: MessageId,
+	datas: ParameterDatas,
+) {
+	if (datas.value && !analogInInterval.has(key)) {
+		analogInInterval.set(
+			key,
+			setInterval(() => {
+				console.log(Math.sin(Date.now() / 100))
+				sendFakeSignal(socket, key.split('#')[0] as MessageId, [
+					Math.sin(Date.now() / 100),
+				])
+			}, 500),
+		)
+	} else {
+		clearInterval(analogInInterval.get(key))
+		analogInInterval.delete(key)
+	}
+}
+
+async function sendFakeSignal(
+	socket: WebSocket,
+	baseKey: MessageId,
+	signal: number[],
+) {
+	socket.send(
+		await gzipJson({
+			'signals': {
+				[baseKey]: {
+					'size': signal.length,
+					'value': signal,
+				},
+			},
+		}),
+	)
 }
